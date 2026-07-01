@@ -1,10 +1,27 @@
-- name: Zip Resource Pack
+name: Optimize and Deploy Resource Pack
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write  # Explicitly forces GitHub to allow file updates
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Zip Resource Pack
         run: |
           zip -r pack.zip assets/ pack.mcmeta
 
       - name: Generate SHA-1 Hash
         run: |
-          sha1sum pack.zip | awk '{print $1}' > pack.zip.sha1
+          sha1sum pack.zip | cut -d' ' -f1 > pack.zip.sha1
 
       - name: Update Release
         uses: softprops/action-gh-release@v2
