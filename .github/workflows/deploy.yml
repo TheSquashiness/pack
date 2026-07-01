@@ -1,20 +1,10 @@
-name: Optimize and Deploy Resource Pack
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Zip Resource Pack
+- name: Zip Resource Pack
         run: |
           zip -r pack.zip assets/ pack.mcmeta
+
+      - name: Generate SHA-1 Hash
+        run: |
+          sha1sum pack.zip | awk '{print $1}' > pack.zip.sha1
 
       - name: Update Release
         uses: softprops/action-gh-release@v2
@@ -25,3 +15,4 @@ jobs:
           prerelease: false
           files: |
             pack.zip
+            pack.zip.sha1
