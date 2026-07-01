@@ -3,7 +3,7 @@ name: Optimize and Deploy Resource Pack
 on:
   push:
     branches:
-      - main  # Triggers whenever you push to the 'main' branch
+      - main
 
 jobs:
   deploy:
@@ -14,14 +14,14 @@ jobs:
 
       - name: Zip Resource Pack
         run: |
-          zip -r pack.zip assets/ pack.mcmeta pack.png
+          zip -r pack.zip assets/ pack.mcmeta
 
       - name: Update Release
-        uses: py7hon/actions-automatic-releases@v1.2.1
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          tag_name: "latest"
+          name: "Latest Pack Build"
+          draft: false
           prerelease: false
-          title: "Latest Pack Build"
           files: |
             pack.zip
